@@ -1,2 +1,2 @@
-# Asset
+# Asset Management System with Faraid Calculation
 Asset Management System is a Laravel-based platform for Muslim families to manage assets and distribute inheritance based on **Faraid (Islamic law)**. It allows users to register assets, add heirs, and calculate inheritance shares automatically.Users can only view their assigned family data, and PDF reports can be generated for Faraid distribution.
