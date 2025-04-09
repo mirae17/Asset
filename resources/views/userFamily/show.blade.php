@@ -1,0 +1,136 @@
+@extends('userFamily.template')
+
+@section('content')
+<style>
+    .details-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 30px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+    }
+
+    h2 {
+        text-align: center;
+        color: #3490dc;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group strong {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    #map {
+        height: 300px;
+        width: 100%;
+        border-radius: 8px;
+        margin-top: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-back {
+        margin-top: 20px;
+        float: right;
+    }
+
+    .btn-back a {
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .btn-back a:hover {
+        color: #fff;
+    }
+</style>
+
+<div class="details-container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2>Show Family Member Details</h2>
+        </div>
+    </div>
+   
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <strong>Name:</strong>
+                {{ $family->name }}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <strong>Email:</strong>
+                {{ $family->email }}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <strong>Phone Number:</strong>
+                {{ $family->phone_number }}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <strong>Address:</strong>
+                {{ $family->address }}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div id="map"></div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <strong>Relation:</strong>
+                {{ $family->relation }}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <strong>Joined On:</strong>
+                {{ $family->created_at }}
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="btn-back">
+                <a class="btn btn-primary" href="{{ route('userFamily.table') }}">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyApR0l8Jwpbwmk9gZmadLYOirF0ju2HG6g&callback=initMap" async defer></script>
+<script>
+    function initMap() {
+        var address = "{{ $family->address }}";
+        var geocoder = new google.maps.Geocoder();
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: {lat: -34.397, lng: 150.644}
+        });
+
+        geocodeAddress(geocoder, map, address);
+    }
+
+    function geocodeAddress(geocoder, map, address) {
+        geocoder.geocode({'address': address}, function(results, status) {
+            if (status === 'OK') {
+                map.setCenter(results[0].geometry.location);
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
+</script>
+@endsection
